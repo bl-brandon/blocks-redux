@@ -2,6 +2,8 @@
 
 A system for generating api state from a simple redux action. Limiting the amount of redux boilerplate code.
 
+**This is not currently an npm package**
+
 ### Technologies Used
 
 * Isomorphic-fetch
@@ -14,7 +16,7 @@ Make sure you have [Node](https://nodejs.org/en/) (8.9.4) and [Yarn](https://yar
 
 ```
   $ git clone git@github.com:hsarb/redux-api-middleware.git
-  $ yarn
+  $ cd redux-api-middleware && yarn
 ```
 
 You have access to many processes on the frontend. Choose the most applicable for your needs:
