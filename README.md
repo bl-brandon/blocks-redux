@@ -30,7 +30,7 @@ You have access to many processes on the frontend. Choose the most applicable fo
 
 ### Usage
 
-Everything will be setup via `configureStore`. Import the function and pass in your inital state, additional middlewares and reducers, then pass it into your provider.
+Everything will be setup via `configureStore`. Import the function and pass in your initial state, additional middlewares, and reducers; then pass it into your provider.
 
 A base example:
 
