@@ -1,10 +1,7 @@
+// @flow
 export default {
   CALL_API: 'CALL_API',
-  CALL_APP: 'CALL_APP',
-  CALL_EVENT: 'CALL_EVENT',
   ERROR: 'ERROR',
   RECEIVE: 'RECEIVE',
   REQUEST: 'REQUEST',
-  ROUTE: '@@router/LOCATION_CHANGE',
-  SET: 'SET'
-}
+};

@@ -1,118 +1,64 @@
-# Blocks-redux
+## Redux API Middleware
 
-A system for generating state from simple redux actions. Limiting the amount of redux boilerplate code.
+A system for generating api state from a simple redux action. Limiting the amount of redux boilerplate code.
 
-## Prerequisites
+### Technologies Used
 
-- Node 6.5.0
-- Npm 3.10.1
+* Isomorphic-fetch
+* Redux
+* Redux Thunk
 
-## Technologies Used
+### Getting Started
 
-- Isomorphic-fetch
-- Redux
-- Redux Thunk
-
-## Installation
+Make sure you have [Node](https://nodejs.org/en/) (8.9.4) and [Yarn](https://yarnpkg.com/en/) installed before attempting the following steps.
 
 ```
-  npm install --save blocks-redux
-```
-
-#### Building the code
-
-```
-  npm install
+  $ git clone git@github.com:hsarb/redux-api-middleware.git
+  $ yarn
 ```
 
 You have access to many processes on the frontend. Choose the most applicable for your needs:
 
-|`npm run ...`|Description|
-|------------------|-----------|
-|clean|Removes the current build/ folder|
-|compile|Babel compiles static files into build/|
-|package|Create build pacakge|
-|publish|Publishes the packages to npm|
+| `npm run ...` | Description                             |
+| ------------- | --------------------------------------- |
+| clean         | Removes the current build/ folder       |
+| compile       | Babel compiles static files into build/ |
+| package       | Create build pacakge                    |
+| publish       | Publishes the packages to npm           |
 
-#### Usage
+### Usage
 
-We need to create a main root reducer that will combine our other reducers. This root reducer will then be inject into our store. This store will also need to take in an initial state and any middlewares that we may want to use in our redux state.
+Everything will be setup via `configureStore`. Import the function and pass in your inital state, additional middlewares and reducers, then pass it into your provider.
 
 A base example:
 
 ```
-import appMiddleware from 'blocks-redux/appMiddleware'
-import appReducer from 'blocks-redux/appReducer'
-import createRootReducer from 'blocks-redux/createRootReducer'
-import configureStore from 'blocks-redux/configureStore'
+import configureStore from '.../configureStore';
 
-const initialState = window.__INITIAL_STATE__
-const rootReducer = createRootReducer({ app: appReducer, routing: routerReducer })
-const store = configureStore(initialState, [ appMiddleware, routerMiddleware(browserHistory) ], rootReducer)
+const initialState = window.__INITIAL_STATE__;
+const store = configureStore(initialState, [ routerMiddleware(browserHistory) ], { ...reducers });
+
+render(
+  <Provider store={store} />
+);
 ```
 
-**Reducers**
+**Actions**
 
-Expects an object of mapped reducers. We have created reducers that you can leverage if you wish. These reducers are responsible for the app state and the api state.
-
-Accessing the reducers:
+Adding to the api store in redux is as simple as calling an action. This action will trigger the middleware to add to an existing key or create a new one. This will then trigger a request and will add the response to the key in the redux store.
 
 ```
-import appReducer from 'blocks-redux/appReducer'
-import apiReducer from 'blocks-redux/apiReducer'
-```
+import createAction from '../createAppAction'
 
-**createRootReducer**
-
-createRootReducer will combine any reducer that is assign in the object passing into the function.
-
-Using createRootReducer:
-
-```
-import createRootReducer from 'blocks-redux/createRootReducer'
-
-const rootReducer = createRootReducer({ app: appReducer, routing: routerReducer })
-```
-
-**configureStore**
-
-configureStore will compose a redux store using the initialState, middlewares and rootReducer passed into it.
-
-```
-import appMiddleware from 'blocks-redux/appMiddleware'
-import appReducer from 'blocks-redux/appReducer'
-import createRootReducer from 'blocks-redux/createRootReducer'
-import configureStore from 'blocks-redux/configureStore'
-
-const initialState = window.__INITIAL_STATE__
-const rootReducer = createRootReducer({ app: appReducer, routing: routerReducer })
-const store = configureStore(initialState, [ appMiddleware, routerMiddleware(browserHistory) ], rootReducer)
-```
-
-**Action Handlers**
-
-There are action handlers that will aid in injecting any action into the correct state. If that state is not currently there, these action will trigger the appropriate reducer to create a new state for that action.
-
-```
-import createAppAction from 'blocks-redux/createAppAction'
-import createApiAction from 'blocks-redux/createApiAction'
-
-createApiAction({
+const myAPIAction = () => createAction({
   dataType: [],
   endpoint: 'http://api.api.com/api',
   key: 'todo',
-  method: 'GET'  
-})
-
-createAppAction({
-  key: 'todo',
-  payload: {
-    hello: 'world'
-  }
+  method: 'GET'
 })
 ```
 
-Expected object paramaters for createApiAction:
+Expected object paramaters for createAction:
 
 ```
 {
@@ -120,14 +66,5 @@ Expected object paramaters for createApiAction:
   endpoint: '',  # API endpoint
   method: 'GET', # API method
   dataType: {}   # Expected datatype from response
-}
-```
-
-Expected object paramaters for createAppAction:
-
-```
-{
-  key: '',                        # Key used by reducer to set data in global store
-  payload: '' || {} || [] || bool # Payload to store in the global store
 }
 ```
